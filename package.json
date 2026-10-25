@@ -1,0 +1,39 @@
+{
+  "name": "gost-browser",
+  "version": "0.3.1",
+  "description": "A Windows browser with capture exclusion enabled by default",
+  "author": "Gost Browser",
+  "private": true,
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test tests/navigation.test.js tests/microphone.test.js tests/screenshot-geometry.test.js",
+    "test:app": "node tests/app.test.js",
+    "test:screenshot": "node tests/screenshot.test.js",
+    "dist": "electron-builder --win portable --x64"
+  },
+  "build": {
+    "compression": "store",
+    "appId": "local.gost.browser",
+    "productName": "Gost Browser",
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "win": {
+      "target": "portable",
+      "signAndEditExecutable": false
+    },
+    "portable": {
+      "artifactName": "Gost-Browser-${version}-Windows.exe"
+    }
+  },
+  "devDependencies": {
+    "electron": "45.0.0",
+    "electron-builder": "26.18.0",
+    "playwright": "1.64.1"
+  }
+}
