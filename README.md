@@ -1,6 +1,6 @@
 <div align="center">
 
-# Ghost Browser
+<h1><img src="docs/ghost-browser-logo.svg" alt="Ghost Browser logo" width="64" height="64" align="absmiddle"> Ghost Browser</h1>
 
 **Your workspace. Your screen. Your choice of what to share.**
 

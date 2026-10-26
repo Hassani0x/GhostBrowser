@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" fill="none">
+  <title>Ghost Browser logo</title>
+  <rect x="8" y="8" width="240" height="240" rx="64" fill="#102D27"/>
+  <rect x="9" y="9" width="238" height="238" rx="63" stroke="#52DBAC" stroke-opacity=".3" stroke-width="2"/>
+  <path d="M64 199V105a64 64 0 0 1 128 0v94l-28-18-36 18-36-18-28 18Z" fill="#65E6B9"/>
+  <path d="M104 105v24m48-24v24" stroke="#102D27" stroke-width="12" stroke-linecap="round"/>
+</svg>
