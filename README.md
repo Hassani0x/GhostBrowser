@@ -6,7 +6,7 @@
 
 A Windows browser that keeps personal web apps out of supported screen captures.
 
-![Windows 11](https://img.shields.io/badge/Windows-11-0078D4) ![Preview](https://img.shields.io/badge/version-0.3.1_preview-35b990) ![MIT license](https://img.shields.io/badge/license-MIT-blue)
+![Windows 11](https://img.shields.io/badge/Windows-11-0078D4) ![Preview](https://img.shields.io/badge/version-0.3.1_preview-35b990) ![MIT license](https://img.shields.io/badge/license-MIT-blue) [![CI](https://github.com/Hassani0x/GostBrowser/actions/workflows/ci.yml/badge.svg)](https://github.com/Hassani0x/GostBrowser/actions/workflows/ci.yml)
 
 [Download for Windows](../../releases/latest) · [User guide](docs/USER_GUIDE.md) · [Compatibility matrix](docs/COMPATIBILITY.md) · [Report a bug](../../issues) · [Contribute](CONTRIBUTING.md)
 
