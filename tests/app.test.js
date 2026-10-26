@@ -80,9 +80,10 @@ async function main() {
           for (const item of app.clipboardBackup) {
             const data = {};
             for (const type of item.types) data[type] = await item.getType(type);
-            items.push(new ClipboardItem(data));
+            if (Object.keys(data).length) items.push(new ClipboardItem(data));
           }
-          await clipboard.write(items);
+          if (items.length) await clipboard.write(items);
+          else clipboard.clear();
         }
         else clipboard.clear();
         delete app.clipboardBackup;
@@ -168,4 +169,3 @@ async function main() {
   }
 }
 main().catch(error => { console.error(error); process.exitCode = 1; });
-
