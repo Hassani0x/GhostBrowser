@@ -1,76 +1,125 @@
-# Gost Browser — Windows 11 preview
+<div align="center">
 
-A separate browser for websites and web apps, with Windows capture exclusion enabled before its window appears. Keep Google Meet in Chrome and use Gost for other websites.
+# Gost Browser
 
-## Run
+**Your workspace. Your screen. Your choice of what to share.**
 
-Close the older Gost window, then open `release/Gost-Browser-0.3.1-Windows.exe`. This is a portable, unsigned preview; installation and administrator access are not required. Website cookies and sign-ins are stored in Gost's own profile, separate from Chrome.
+A Windows browser that keeps personal web apps out of supported screen captures.
 
-From source (Node.js required):
+![Windows 11](https://img.shields.io/badge/Windows-11-0078D4) ![Preview](https://img.shields.io/badge/version-0.3.1_preview-35b990) ![MIT license](https://img.shields.io/badge/license-MIT-blue)
+
+[Download for Windows](../../releases/latest) · [User guide](docs/USER_GUIDE.md) · [Report a bug](../../issues) · [Contribute](CONTRIBUTING.md)
+
+</div>
+
+## Share your presentation. Keep your personal tabs to yourself.
+
+Keep Google Meet in Chrome. Open your notes, reference pages, or favorite web apps in Gost Browser. Gost enables Windows capture exclusion before showing its window, so compatible screen-sharing tools can leave it out of the shared picture.
+
+> **Windows 11 preview:** capture exclusion depends on the recording or sharing software. Verify the received video from a second device before relying on it. This is not a universal invisibility guarantee.
+
+![Gost Browser start page](docs/browser-preview.png)
+
+## Features
+
+| Feature | What you get |
+| --- | --- |
+| Personal web workspace | Tabs, navigation, search, quick links, and persistent website sessions separate from Chrome. |
+| Capture exclusion | Windows capture protection enabled on the browser and screenshot selection overlay. |
+| Area screenshots | Capture a rectangle from your desktop, another browser, or another app, then paste the PNG. |
+| Microphone permissions | Allow a website for the current session, block requests, or revoke access. |
+| Quick hide and recovery | Global show/hide shortcut and system-tray controls, with no taskbar entry. |
+| Sandboxed web pages | Remote pages run without Node.js or direct app-control access. |
+
+## Get started
+
+1. Download **Gost-Browser-0.3.1-Windows.exe** from [Releases](../../releases/latest).
+2. Run the portable application on **Windows 11 x64**. No installer or administrator access is required. This preview is unsigned.
+3. Open a website in Gost. Keep your meeting in Chrome or your usual meeting app.
+4. Before sharing anything private, [check what a second participant actually sees](docs/USER_GUIDE.md#verify-your-google-meet-setup).
+
+Cookies and sign-ins stay in Gost's own local profile. Existing Chrome sessions are not imported. Website sign-in restrictions can still apply.
+
+### Capture → select → paste
+
+Press **Ctrl+Shift+S**, drag a rectangle, then click your destination field and press **Ctrl+V**. You can also use the camera and Paste buttons in Gost.
+
+- Capture works on the monitor containing your pointer, including other apps and the desktop.
+- **Esc** cancels; **Enter** captures the whole selected monitor.
+- Screenshots are copied to the clipboard, not automatically saved or uploaded. Clipboard history or sync may retain them if enabled.
+- A selection cannot span monitors in this preview. Capture-protected content from other apps may be absent or blank.
+
+### Controls
+
+| Shortcut | Action |
+| --- | --- |
+| Ctrl+Shift+Space | Show or hide Gost, including while another app is focused |
+| Ctrl+Shift+S | Capture an area |
+| Ctrl+V | Paste a copied image into a compatible field |
+| Ctrl+L | Focus the address bar |
+| Ctrl+T / Ctrl+W | Open / close a tab |
+| Ctrl+Tab / Ctrl+Shift+Tab | Next / previous tab |
+| Ctrl+R | Reload |
+
+The tray icon near the Windows clock provides Show, Hide, Capture area, and Quit. Global shortcuts can conflict with other applications; the button or tray menu remains available.
+
+### Website microphone access
+
+Use the website's microphone or voice control, then choose **Allow for this session** in Gost's permission bar. Grants apply to that website origin and reset on exit. **Mic allowed · Reset** revokes access and reloads tabs for that origin to stop existing audio tracks.
+
+## Know the boundaries
+
+Gost uses Electron's `setContentProtection(true)`, backed by Windows display affinity. The status indicator confirms that the setting is enabled; it does not confirm Google Meet's received video.
+
+Screen exclusion does not hide shared audio, the shared cursor, operating-system dialogs, the tray icon, process lists, or the physical screen. File pickers are outside Gost's protection. Test each monitor and capture mode again after updates.
+
+This preview supports websites and web apps, not arbitrary native Windows programs. Camera, website screen capture, downloads, notifications, and location permissions are disabled. There are no browser extensions, password manager, or automatic updates. Some embedded-browser sign-ins and popup-dependent authentication flows may fail. Windows may refuse pin-on-top while taskbar hiding is enabled; Gost reports that failure.
+
+## Run from source
+
+Use Windows 11 x64 with Node.js 24 LTS and npm:
 
 ```powershell
+git clone https://github.com/Hassani0x/GostBrowser.git
+cd GostBrowser
 npm.cmd ci
 npm.cmd start
 ```
 
-## Controls
+Build a portable Windows executable:
 
-- Address bar: open an HTTP/HTTPS website or search Google.
-- Ctrl+L: focus address bar. Ctrl+T / Ctrl+W: open / close tab.
-- Ctrl+Tab / Ctrl+Shift+Tab: switch tabs. Ctrl+R: reload.
-- Ctrl+Shift+Space: hide / show the whole browser, even while Chrome is focused.
-- Pin on top: keep Gost above other windows.
-- On this system Windows sometimes refuses pin-on-top while taskbar hiding is enabled. Gost reports that failure; microphone and capture exclusion still work.
-- Gost is hidden from the taskbar. Click its system-tray icon near the clock (possibly under the up arrow) to show/hide it. Right-click for Show, Hide, and Quit. This also works if another app owns the shortcut.
+```powershell
+npm.cmd run dist
+```
 
-## Microphone
+The output is written to `release/`.
 
-Click a website's voice/microphone button, then choose **Allow for this session** in Gost's permission bar. Permission applies to that website origin and resets when Gost quits. Choose **Block** to deny a request. **Mic allowed · Reset** revokes permission and reloads all tabs for that origin to stop existing audio tracks.
-
-## Screenshot an area outside Gost
-
-Click the camera button beside **Pin on top**, or press **Ctrl+Shift+S** while working in another app. The tray menu also offers **Capture area**. If another application owns the shortcut, the button still works and its tooltip reports the conflict.
-
-Gost temporarily hides itself and captures the monitor containing your pointer. Drag over the area you want; releasing the mouse copies a PNG image to the clipboard. Click the destination message field and paste with **Ctrl+V** (not Ctrl+B), or use the **Paste** button beside the screenshot camera. Right-click editable fields for Paste. **Esc** or **Cancel** leaves the clipboard unchanged. **Enter** captures the entire selected monitor. Move the pointer to another monitor before starting to capture that monitor; a selection cannot span multiple monitors in this version.
-
-The selection overlay is excluded from supported captures before it is shown and has no taskbar entry. It uses its own interface, without opening Windows Snipping Tool or a save dialog. Gost restores its previous visibility afterwards; if it was hidden before the shortcut, it stays hidden. Nothing is saved to a file or uploaded automatically. The image remains in the Windows clipboard until replaced, and Windows clipboard history/sync may retain it if enabled.
-
-The shared mouse pointer may still be visible to meeting participants. Capture exclusion is API-dependent: verify the **selection overlay as well as Gost** from a second Meet participant's view before relying on it. Other capture-protected apps may appear absent or blank in your screenshot.
-
-## Verify your Google Meet setup
-
-1. Open Meet in Chrome and join a test meeting from a second device or with someone who can check the received video.
-2. Start sharing your **entire screen** in Chrome.
-3. Open Gost over a recognizable background and browse a harmless test page.
-4. On the receiving device, verify that the background remains visible and the Gost window is absent. Check moving, resizing, pinning, tab changes, and hiding/showing.
-5. Repeat for every monitor and capture mode you plan to use. Repeat after Windows, Chrome, or app updates.
-
-The status “Capture exclusion on” means the setting is enabled; it does **not** mean Meet has been independently verified. Windows implements this through `SetWindowDisplayAffinity(WDA_EXCLUDEFROMCAPTURE)` via Electron. Capture APIs and software can differ. This is not a universal invisibility guarantee and does not hide the app from process lists or someone looking at the physical screen. Screen exclusion does not suppress shared audio or the shared cursor.
-
-## Preview scope
-
-- Tabs, navigation, search, persistent cookies, quick links, always-on-top, hide/show.
-- Web pages are sandboxed, with no Node.js or app-control access.
-- New HTTP/HTTPS windows are redirected into tabs inside the protected window. Pop-ups requiring `window.opener`, POST data, or special authentication flows may not work. No automatic external browser launch.
-- ChatGPT and other sites can impose their own embedded-browser/login restrictions. Actual account sign-in needs user testing; no credentials are imported from Chrome.
-- Microphone access uses the permission prompt above. Downloads, notifications, camera, screen capture, geolocation and other permissions remain disabled.
-- File upload pickers and other operating-system UI are outside the app's capture protection; do not open them during sharing if their contents are private.
-- Websites and web apps only, not arbitrary Windows applications. No extensions, password manager, or automatic updates in this preview.
-
-## Development and checks
+## Development and verification
 
 ```powershell
 npm.cmd test
 npm.cmd run test:app
 npm.cmd run test:screenshot
-npm.cmd run dist
 ```
 
-The app checks use a temporary isolated browser profile and a local fixture. They verify the actual Windows display-affinity value, navigation, protected pop-up handling, keyboard controls, renderer isolation, and microphone allow/block/revoke using a simulated audio device. They write `test-results/verification.json` and app-only screenshots. They do not constitute a Google Meet participant-side test or a physical microphone check.
+Unit checks cover navigation, microphone policy, and screenshot geometry. Electron checks exercise sandboxing, permissions, controls, native display affinity, and screenshot selection. A controlled real-screen/clipboard pixel comparison is available with:
 
-Screenshot selection tests use a synthetic screen image and an in-memory clipboard substitute; an additional check writes the production PNG to the real clipboard and restores its previous contents. They verify the real overlay's native Windows exclusion flag, exact cropped pixels, reverse dragging, cancellation, duplicate suppression, error recovery, and visibility restoration. Geometry tests cover mixed scaling. The `tests/capture-roundtrip.js` check captures a controlled colored app window and verifies that clipboard pixels exactly match the cropped screen image. The optional `tests/capture-smoke.js` Electron entry point checks the real capture API and discards the pixels without saving or copying them.
+```powershell
+node node_modules/electron/cli.js tests/capture-roundtrip.js
+```
 
-Built independently; OpenCluely was a concept reference, and no OpenCluely code was copied.
+Desktop checks open windows and may temporarily replace and restore clipboard contents. Run them outside a live meeting. Automated results do not replace participant-side Meet verification, physical microphone testing, or account sign-in testing. See the [full guide](docs/USER_GUIDE.md) for test scope.
 
-References: [Electron content protection](https://www.electronjs.org/docs/latest/api/browser-window#winsetcontentprotectionenable), [Microsoft display affinity](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowdisplayaffinity).
+## Help shape Gost
 
+Reproducible bug reports, accessibility improvements, multi-monitor testing, and clearer documentation are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md) before opening an issue. If Gost is useful to you, a star helps others find it.
+
+See [CHANGELOG.md](CHANGELOG.md) for release history.
+
+## Credits and license
+
+Created by [Hussain Agha Hassani](https://github.com/Hassani0x). Built with Electron. [OpenCluely](https://github.com/TechyCSR/OpenCluely) was a concept reference; no OpenCluely code was copied.
+
+Released under the [MIT license](LICENSE).
+
+Technical references: [Electron content protection](https://www.electronjs.org/docs/latest/api/browser-window#winsetcontentprotectionenable) · [Windows display affinity](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowdisplayaffinity).
