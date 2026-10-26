@@ -1,0 +1,53 @@
+name: Capture compatibility report
+description: Share receiver-side results from a screen-sharing or capture application.
+title: "[Compatibility]: "
+labels: ["compatibility", "community-testing"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not include private meeting content or personal information. Test with a harmless page and confirm the result from a receiver or recording.
+  - type: input
+    id: version
+    attributes:
+      label: Gost and Windows versions
+      placeholder: "Gost 0.3.1 on Windows 11 24H2 x64"
+    validations:
+      required: true
+  - type: input
+    id: capture
+    attributes:
+      label: Capture application and version
+      placeholder: "Chrome 141 + Google Meet, OBS 31, Teams, Zoom, or Discord"
+    validations:
+      required: true
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Capture mode
+      options:
+        - Entire screen
+        - Application window
+        - Browser tab
+        - Recording
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: result
+    attributes:
+      label: Receiver-side result
+      options:
+        - Gost was excluded
+        - Gost appeared
+        - Gost was blank or partially visible
+        - Result varied between runs
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Reproduction details
+      description: Include monitor layout, display scaling, whether the overlay was tested, and any repeatability information.
+    validations:
+      required: true

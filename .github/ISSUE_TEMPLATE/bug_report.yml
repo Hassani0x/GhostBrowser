@@ -1,0 +1,51 @@
+name: Compatibility or bug report
+description: Report a reproducible problem with Gost Browser.
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please remove credentials, private URLs, screenshots, and meeting content before submitting.
+        For security vulnerabilities, follow [SECURITY.md](../../SECURITY.md) instead.
+  - type: input
+    id: version
+    attributes:
+      label: Gost version
+      placeholder: "0.3.1"
+    validations:
+      required: true
+  - type: input
+    id: windows
+    attributes:
+      label: Windows version and architecture
+      placeholder: "Windows 11 24H2, x64"
+    validations:
+      required: true
+  - type: input
+    id: capture-app
+    attributes:
+      label: Sharing or capture application
+      placeholder: "Google Meet in Chrome, OBS, Teams, Zoom, or not applicable"
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: Include the smallest reliable sequence of steps.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Display and environment details
+      description: Include monitor count, scaling percentage, and whether the app was portable or built from source.
+    validations:
+      required: true

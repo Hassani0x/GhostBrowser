@@ -8,7 +8,7 @@ A Windows browser that keeps personal web apps out of supported screen captures.
 
 ![Windows 11](https://img.shields.io/badge/Windows-11-0078D4) ![Preview](https://img.shields.io/badge/version-0.3.1_preview-35b990) ![MIT license](https://img.shields.io/badge/license-MIT-blue)
 
-[Download for Windows](../../releases/latest) · [User guide](docs/USER_GUIDE.md) · [Report a bug](../../issues) · [Contribute](CONTRIBUTING.md)
+[Download for Windows](../../releases/latest) · [User guide](docs/USER_GUIDE.md) · [Compatibility matrix](docs/COMPATIBILITY.md) · [Report a bug](../../issues) · [Contribute](CONTRIBUTING.md)
 
 </div>
 
@@ -19,6 +19,16 @@ Keep Google Meet in Chrome. Open your notes, reference pages, or favorite web ap
 > **Windows 11 preview:** capture exclusion depends on the recording or sharing software. Verify the received video from a second device before relying on it. This is not a universal invisibility guarantee.
 
 ![Gost Browser start page](docs/browser-preview.png)
+
+### See the workflow
+
+1. Keep your meeting in Chrome, Teams, Zoom, or another capture app.
+2. Open personal notes or reference pages in Gost.
+3. Share your screen and verify the receiver-side result from a second device.
+
+Gost is intentionally honest about the boundary: Windows and the capture application decide whether content protection is honored. The [compatibility matrix](docs/COMPATIBILITY.md) tracks reproducible results instead of promising universal invisibility.
+
+If you test Gost with a recorder or meeting app, please [submit a compatibility report](.github/ISSUE_TEMPLATE/compatibility-report.yml). Safe, receiver-side evidence helps the project more than unverified claims.
 
 ## Features
 
@@ -115,6 +125,8 @@ Desktop checks open windows and may temporarily replace and restore clipboard co
 Reproducible bug reports, accessibility improvements, multi-monitor testing, and clearer documentation are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md) before opening an issue. If Gost is useful to you, a star helps others find it.
 
 See [CHANGELOG.md](CHANGELOG.md) for release history.
+
+See [ROADMAP.md](ROADMAP.md) for planned improvements and [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md) for receiver-side testing results.
 
 ## Credits and license
 
