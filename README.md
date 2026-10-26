@@ -140,8 +140,6 @@ The most useful way to help Gost grow is to share a reproducible result: the Win
 
 ## License
 
-Built with Electron.
+Built by Hussain Agha Hassani.
 
 Released under the [MIT license](LICENSE).
-
-Technical references: [Electron content protection](https://www.electronjs.org/docs/latest/api/browser-window#winsetcontentprotectionenable) · [Windows display affinity](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowdisplayaffinity).
