@@ -55,7 +55,7 @@ async function main() {
       for (const item of backup) {
         const data = {};
         for (const type of item.types) data[type] = await item.getType(type);
-        restore.push(new ClipboardItem(data));
+        if (Object.keys(data).length) restore.push(new ClipboardItem(data));
       }
       try {
         await app.screenshotTest.copyScreenshot(app.screenshotTest.copies[0]);
@@ -85,4 +85,3 @@ async function main() {
   } finally { await application.close(); }
 }
 main().catch(error => { console.error(error); process.exitCode = 1; });
-
