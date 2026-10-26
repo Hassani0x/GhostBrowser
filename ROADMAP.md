@@ -5,7 +5,7 @@ Ghost Browser is a focused Windows preview, not a promise of universal capture i
 ## Next
 
 - Publish signed Windows builds and document the verification process.
-- Add automated Windows CI and release artifacts for every version tag.
+- Maintain the existing Windows CI and release workflow; expand receiver-side validation.
 - Collect receiver-side compatibility reports for Google Meet, Zoom, Teams, OBS, and Discord.
 - Improve keyboard navigation, focus states, and screen-reader labels.
 - Add clearer diagnostics for display scaling, monitor selection, and capture API behavior.

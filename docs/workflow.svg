@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300">
+<rect width="1200" height="300" rx="24" fill="#10201c"/>
+<g font-family="Arial, sans-serif" fill="#effbf5">
+<text x="48" y="55" font-size="24" font-weight="bold">One screen. Separate workspaces.</text>
+<g fill="#193a30" stroke="#4eac89"><rect x="48" y="90" width="340" height="135" rx="16"/><rect x="430" y="90" width="340" height="135" rx="16"/><rect x="812" y="90" width="340" height="135" rx="16"/></g>
+<g font-size="23" font-weight="bold"><text x="72" y="131">1. Present</text><text x="454" y="131">2. Browse in Ghost</text><text x="836" y="131">3. Verify the receiver</text></g>
+<g font-size="18" fill="#bfd9cd"><text x="72" y="168">Keep your meeting in Chrome.</text><text x="72" y="195">Share your presentation.</text><text x="454" y="168">Open notes and reference tabs.</text><text x="454" y="195">Windows capture exclusion is on.</text><text x="836" y="168">Check from a second device.</text><text x="836" y="195">Test the screenshot overlay too.</text></g>
+<text x="48" y="267" fill="#a9c2b6" font-size="16">Workflow illustration, not a compatibility test. Results depend on the sharing app and capture mode.</text>
+</g></svg>

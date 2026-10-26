@@ -8,7 +8,7 @@ A privacy-focused Windows browser for keeping personal web apps out of supported
 
 ![Windows 11](https://img.shields.io/badge/Windows-11-0078D4) ![Preview](https://img.shields.io/badge/version-0.3.1_preview-35b990) ![MIT license](https://img.shields.io/badge/license-MIT-blue) [![CI](https://github.com/Hassani0x/GhostBrowser/actions/workflows/ci.yml/badge.svg)](https://github.com/Hassani0x/GhostBrowser/actions/workflows/ci.yml)
 
-[Download for Windows](../../releases/latest) · [User guide](docs/USER_GUIDE.md) · [Compatibility matrix](docs/COMPATIBILITY.md) · [Report a bug](../../issues) · [Contribute](CONTRIBUTING.md)
+[Download Windows 0.3.1](https://github.com/Hassani0x/GhostBrowser/releases/download/v0.3.1/Ghost-Browser-0.3.1-Windows.exe) · [User guide](docs/USER_GUIDE.md) · [Compatibility matrix](docs/COMPATIBILITY.md) · [Report a bug](../../issues) · [Contribute](CONTRIBUTING.md)
 
 </div>
 
@@ -20,6 +20,8 @@ Keep Google Meet in Chrome. Open your notes, reference pages, or favorite web ap
 
 ![Ghost Browser start page](docs/browser-preview.png)
 
+![Three-step workflow: present in Chrome, browse in Ghost, and verify the receiver. Illustration only.](docs/workflow.svg)
+
 ### See the workflow
 
 1. Keep your meeting in Chrome, Teams, Zoom, or another capture app.
@@ -28,13 +30,12 @@ Keep Google Meet in Chrome. Open your notes, reference pages, or favorite web ap
 
 Ghost is intentionally honest about the boundary: Windows and the capture application decide whether content protection is honored. The [compatibility matrix](docs/COMPATIBILITY.md) tracks reproducible results instead of promising universal invisibility.
 
-If you test Ghost with a recorder or meeting app, please [submit a compatibility report](.github/ISSUE_TEMPLATE/compatibility-report.yml). Safe, receiver-side evidence helps the project more than unverified claims.
+If you test Ghost with a recorder or meeting app, please [submit a compatibility report](https://github.com/Hassani0x/GhostBrowser/issues/new?template=compatibility-report.yml). Safe, receiver-side evidence helps the project more than unverified claims.
 
 ### Why Ghost?
 
 Ghost is for people who need a private web workspace during a presentation, interview, demo, lesson, or live support session. It keeps personal tabs separate from the meeting browser and exposes the Windows capture-protection status instead of making an absolute invisibility claim.
 
-**Useful search terms:** Windows privacy browser, screen-sharing privacy, Electron capture exclusion, Windows display affinity, private browser workspace, presentation browser, protected screenshots.
 
 ## Features
 
@@ -126,6 +127,12 @@ node node_modules/electron/cli.js tests/capture-roundtrip.js
 
 Desktop checks open windows and may temporarily replace and restore clipboard contents. Run them outside a live meeting. Automated results do not replace participant-side Meet verification, physical microphone testing, or account sign-in testing. See the [full guide](docs/USER_GUIDE.md) for test scope.
 
+## Help test the preview
+
+Start with one useful contribution: [test your screen-sharing setup](https://github.com/Hassani0x/GhostBrowser/issues/new?template=compatibility-report.yml). Both success and failure reports help. No coding is required; include your versions, capture mode, and monitor scaling.
+
+If Ghost solves a problem for you, star the repository to bookmark it and share a real result with someone who has the same need.
+
 ## Help shape Ghost
 
 Reproducible bug reports, accessibility improvements, multi-monitor testing, and clearer documentation are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md) before opening an issue. If Ghost is useful to you, a star helps others find it.
@@ -136,7 +143,7 @@ See [ROADMAP.md](ROADMAP.md) for planned improvements and [docs/COMPATIBILITY.md
 
 ### Share a real result
 
-The most useful way to help Ghost grow is to share a reproducible result: the Windows version, capture application, capture mode, monitor scaling, and what a receiver actually saw. Use the [compatibility report](.github/ISSUE_TEMPLATE/compatibility-report.yml) instead of posting private meeting content or making an unverified claim.
+The most useful way to help Ghost grow is to share a reproducible result: the Windows version, capture application, capture mode, monitor scaling, and what a receiver actually saw. Use the [compatibility report](https://github.com/Hassani0x/GhostBrowser/issues/new?template=compatibility-report.yml) instead of posting private meeting content or making an unverified claim.
 
 ## License
 

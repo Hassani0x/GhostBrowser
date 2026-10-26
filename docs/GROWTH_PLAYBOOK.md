@@ -38,3 +38,7 @@ Relevant communities may include Hacker News, Reddit communities, Dev.to, Produc
 - Measure release downloads, unique contributors, issue response time, and compatibility reports—not only stars.
 
 Stars and “repository of the week” placement cannot be guaranteed. A clear project, a useful release, and trustworthy evidence are the durable path to visibility.
+
+## Execute the launch
+
+Use [the launch kit](LAUNCH_KIT.md) for ready-to-edit posts, a real demo recording script, and a seven-day sequence. Track progress against [the initial baseline](growth-baseline.json).

@@ -1,0 +1,18 @@
+{
+  "note": "Asset downloads are not unique users. This is a one-time baseline, not an automated monitor.",
+  "release": "v0.3.1",
+  "observed_at_utc": "2026-10-26T07:36:43.8624511Z",
+  "forks": 0,
+  "stars": 0,
+  "assets": [
+    {
+      "name": "Ghost-Browser-0.3.1-Windows.exe",
+      "download_count": 0
+    },
+    {
+      "name": "SHA256SUMS.txt",
+      "download_count": 0
+    }
+  ],
+  "repository": "Hassani0x/GhostBrowser"
+}
