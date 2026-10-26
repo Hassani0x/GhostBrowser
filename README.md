@@ -4,7 +4,7 @@
 
 **Your workspace. Your screen. Your choice of what to share.**
 
-A Windows browser that keeps personal web apps out of supported screen captures.
+A privacy-focused Windows browser for keeping personal web apps out of supported screen captures while you share your screen.
 
 ![Windows 11](https://img.shields.io/badge/Windows-11-0078D4) ![Preview](https://img.shields.io/badge/version-0.3.1_preview-35b990) ![MIT license](https://img.shields.io/badge/license-MIT-blue) [![CI](https://github.com/Hassani0x/GostBrowser/actions/workflows/ci.yml/badge.svg)](https://github.com/Hassani0x/GostBrowser/actions/workflows/ci.yml)
 
@@ -29,6 +29,12 @@ Keep Google Meet in Chrome. Open your notes, reference pages, or favorite web ap
 Gost is intentionally honest about the boundary: Windows and the capture application decide whether content protection is honored. The [compatibility matrix](docs/COMPATIBILITY.md) tracks reproducible results instead of promising universal invisibility.
 
 If you test Gost with a recorder or meeting app, please [submit a compatibility report](.github/ISSUE_TEMPLATE/compatibility-report.yml). Safe, receiver-side evidence helps the project more than unverified claims.
+
+### Why Gost?
+
+Gost is for people who need a private web workspace during a presentation, interview, demo, lesson, or live support session. It keeps personal tabs separate from the meeting browser and exposes the Windows capture-protection status instead of making an absolute invisibility claim.
+
+**Useful search terms:** Windows privacy browser, screen-sharing privacy, Electron capture exclusion, Windows display affinity, private browser workspace, presentation browser, protected screenshots.
 
 ## Features
 
@@ -128,9 +134,13 @@ See [CHANGELOG.md](CHANGELOG.md) for release history.
 
 See [ROADMAP.md](ROADMAP.md) for planned improvements and [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md) for receiver-side testing results.
 
-## Credits and license
+### Share a real result
 
-Created by [Hussain Agha Hassani](https://github.com/Hassani0x). Built with Electron. [OpenCluely](https://github.com/TechyCSR/OpenCluely) was a concept reference; no OpenCluely code was copied.
+The most useful way to help Gost grow is to share a reproducible result: the Windows version, capture application, capture mode, monitor scaling, and what a receiver actually saw. Use the [compatibility report](.github/ISSUE_TEMPLATE/compatibility-report.yml) instead of posting private meeting content or making an unverified claim.
+
+## License
+
+Built with Electron.
 
 Released under the [MIT license](LICENSE).
 

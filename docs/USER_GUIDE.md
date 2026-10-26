@@ -70,7 +70,4 @@ The app checks use a temporary isolated browser profile and a local fixture. The
 
 Screenshot selection tests use a synthetic screen image and an in-memory clipboard substitute; an additional check writes the production PNG to the real clipboard and restores its previous contents. They verify the real overlay's native Windows exclusion flag, exact cropped pixels, reverse dragging, cancellation, duplicate suppression, error recovery, and visibility restoration. Geometry tests cover mixed scaling. The `tests/capture-roundtrip.js` check captures a controlled colored app window and verifies that clipboard pixels exactly match the cropped screen image. The optional `tests/capture-smoke.js` Electron entry point checks the real capture API and discards the pixels without saving or copying them.
 
-Built independently; OpenCluely was a concept reference, and no OpenCluely code was copied.
-
 References: [Electron content protection](https://www.electronjs.org/docs/latest/api/browser-window#winsetcontentprotectionenable), [Microsoft display affinity](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowdisplayaffinity).
-
