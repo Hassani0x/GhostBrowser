@@ -5,7 +5,7 @@ const { isWebURL, resolveAddress } = require('./navigation');
 const { createMicrophonePermissions, originOf } = require('./microphone');
 const { createScreenshotTool } = require('./screenshot');
 
-const smoke = process.env.GOST_TEST_PROFILE;
+const smoke = process.env.GHOST_TEST_PROFILE;
 if (smoke) app.setPath('userData', smoke);
 const HOME = pathToFileURL(path.join(__dirname, 'home.html')).href;
 const SHELL = pathToFileURL(path.join(__dirname, 'shell.html')).href;
@@ -134,14 +134,14 @@ function toggleVisible() {
 app.whenReady().then(async () => {
   if (process.platform !== 'win32') throw new Error('This build requires Windows 11.');
   Menu.setApplicationMenu(null);
-  browserSession = session.fromPartition('persist:gost-web');
+  browserSession = session.fromPartition('persist:ghost-web');
   browserSession.setPermissionCheckHandler(microphone.check);
   browserSession.setPermissionRequestHandler(microphone.request);
   browserSession.on('will-download', (event) => {
     event.preventDefault(); notice = 'Downloads are disabled in this first version.'; publish();
   });
   win = new BrowserWindow({
-    title: 'Gost Browser', width: 1180, height: 800, minWidth: 760, minHeight: 520,
+    title: 'Ghost Browser', width: 1180, height: 800, minWidth: 760, minHeight: 520,
     show: false, skipTaskbar: true, backgroundColor: '#101514', autoHideMenuBar: true,
     webPreferences: { preload: path.join(__dirname, 'preload.js'), nodeIntegration: false, contextIsolation: true, sandbox: true }
   });
@@ -167,11 +167,11 @@ app.whenReady().then(async () => {
     pixels[i] = eye ? 20 : 205; pixels[i + 1] = eye ? 23 : 239; pixels[i + 2] = eye ? 16 : 184; pixels[i + 3] = 255;
   }
   tray = new Tray(nativeImage.createFromBitmap(pixels, { width: 32, height: 32 }));
-  tray.setToolTip('Gost Browser — click to show or hide');
+  tray.setToolTip('Ghost Browser — click to show or hide');
   tray.on('click', toggleVisible);
   tray.setContextMenu(Menu.buildFromTemplate([
-    { label: 'Show Gost Browser', click: () => { screenshotTool.cancel(); win.show(); win.restore(); win.focus(); } },
-    { label: 'Hide Gost Browser', click: () => win.hide() },
+    { label: 'Show Ghost Browser', click: () => { screenshotTool.cancel(); win.show(); win.restore(); win.focus(); } },
+    { label: 'Hide Ghost Browser', click: () => win.hide() },
     { label: 'Capture area (Ctrl+Shift+S)', click: () => { void screenshotTool.start(); } },
     { type: 'separator' }, { label: 'Quit', click: () => app.quit() }
   ]));

@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for helping improve Gost Browser. Small, focused changes are easiest to review.
+Thanks for helping improve Ghost Browser. Small, focused changes are easiest to review.
 
 ## Develop
 
@@ -10,7 +10,7 @@ Preserve renderer sandboxing, keep app-control IPC unavailable to remote website
 
 ## Report a bug
 
-Include the Gost and Windows versions, steps to reproduce, expected and actual results, and relevant display scaling and monitor arrangement. For capture issues, identify the sharing application and whether the result was observed on a receiving device. Remove private content from screenshots and logs. For security concerns, follow SECURITY.md.
+Include the Ghost and Windows versions, steps to reproduce, expected and actual results, and relevant display scaling and monitor arrangement. For capture issues, identify the sharing application and whether the result was observed on a receiving device. Remove private content from screenshots and logs. For security concerns, follow SECURITY.md.
 
 ## Useful contributions
 

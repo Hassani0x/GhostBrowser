@@ -97,7 +97,7 @@ function createScreenshotTool({ getMainWindow, onStatus, onRestoreFocus = () => 
         if (!image || image.isEmpty()) throw new Error('Empty capture');
         current.image = image;
         const overlay = new BrowserWindow({
-          ...display.bounds, title: 'Gost screenshot selection', show: false,
+          ...display.bounds, title: 'Ghost screenshot selection', show: false,
           frame: false, skipTaskbar: true, alwaysOnTop: true, hasShadow: false,
           resizable: false, movable: false, minimizable: false, maximizable: false,
           fullscreenable: false, enableLargerThanScreen: true, backgroundColor: '#101714',

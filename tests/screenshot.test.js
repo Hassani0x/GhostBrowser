@@ -8,7 +8,7 @@ const { cropRectangle } = require('../src/screenshot-geometry');
 async function main() {
   const results = path.resolve('test-results');
   await fs.mkdir(results, { recursive: true });
-  const env = { ...process.env, GOST_TEST_PROFILE: await fs.mkdtemp(path.join(results, 'capture-profile-')) }; delete env.ELECTRON_RUN_AS_NODE;
+  const env = { ...process.env, GHOST_TEST_PROFILE: await fs.mkdtemp(path.join(results, 'capture-profile-')) }; delete env.ELECTRON_RUN_AS_NODE;
   const application = await electron.launch({ args: [path.join(__dirname, 'screenshot-harness.js')], env });
   try {
     await application.firstWindow();
@@ -21,14 +21,14 @@ async function main() {
       const overlay = await opening;
       await overlay.waitForFunction(() => document.getElementById('desktop').naturalWidth > 0);
       await application.evaluate(async ({ BrowserWindow }) => {
-        const w = BrowserWindow.getAllWindows().find(w => w.getTitle() === 'Gost screenshot selection');
+        const w = BrowserWindow.getAllWindows().find(w => w.getTitle() === 'Ghost screenshot selection');
         while (!w.isVisible()) await new Promise(resolve => setTimeout(resolve, 20));
       });
       return overlay;
     }
     const overlay = await start();
     const windowData = await application.evaluate(({ app, BrowserWindow }) => {
-      const w = BrowserWindow.getAllWindows().find(w => w.getTitle() === 'Gost screenshot selection');
+      const w = BrowserWindow.getAllWindows().find(w => w.getTitle() === 'Ghost screenshot selection');
       return { protected: w.isContentProtected(), handle: w.getNativeWindowHandle().readBigUInt64LE().toString(), mainVisible: app.screenshotTest.main.isVisible(), size: w.getContentSize() };
     });
     assert.equal(windowData.mainVisible, false);
@@ -39,7 +39,7 @@ async function main() {
     await application.evaluate(({ app }) => app.screenshotTest.tool.start());
     assert.equal(await application.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows().length), 2);
     await overlay.mouse.move(320, 350); await overlay.mouse.down(); await overlay.mouse.move(100, 180);
-    const preview = await application.evaluate(async ({ BrowserWindow }) => (await BrowserWindow.getAllWindows().find(w => w.getTitle() === 'Gost screenshot selection').capturePage()).toPNG().toString('base64'));
+    const preview = await application.evaluate(async ({ BrowserWindow }) => (await BrowserWindow.getAllWindows().find(w => w.getTitle() === 'Ghost screenshot selection').capturePage()).toPNG().toString('base64'));
     await fs.writeFile(path.join(results, 'screenshot-picker.png'), Buffer.from(preview, 'base64'));
     await overlay.mouse.up();
     await application.evaluate(async ({ app }) => { while (app.screenshotTest.tool.busy) await new Promise(resolve => setTimeout(resolve, 20)); });
@@ -72,7 +72,7 @@ async function main() {
     await application.evaluate(({ app }) => app.screenshotTest.main.hide());
     await start();
     await application.evaluate(({ BrowserWindow }) => {
-      const w = BrowserWindow.getAllWindows().find(w => w.getTitle() === 'Gost screenshot selection');
+      const w = BrowserWindow.getAllWindows().find(w => w.getTitle() === 'Ghost screenshot selection');
       w.webContents.sendInputEvent({ type: 'keyDown', keyCode: 'Escape' });
     });
     await application.evaluate(async ({ app }) => { while (app.screenshotTest.tool.busy) await new Promise(resolve => setTimeout(resolve, 20)); });

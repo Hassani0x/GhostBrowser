@@ -1,6 +1,6 @@
 # Roadmap
 
-Gost Browser is a focused Windows preview, not a promise of universal capture invisibility. Priorities are based on reliability, compatibility evidence, and a small install footprint.
+Ghost Browser is a focused Windows preview, not a promise of universal capture invisibility. Priorities are based on reliability, compatibility evidence, and a small install footprint.
 
 ## Next
 
@@ -21,7 +21,7 @@ Gost Browser is a focused Windows preview, not a promise of universal capture in
 
 - Claiming universal invisibility across every recorder or capture API.
 - Importing Chrome passwords, cookies, or browser profiles.
-- Running arbitrary native Windows applications inside Gost.
+- Running arbitrary native Windows applications inside Ghost.
 - Adding extensions or a password manager before the security model is redesigned.
 
 Have a concrete use case? Open a feature request with the workflow, constraints, and a safe reproduction.

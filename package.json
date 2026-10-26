@@ -1,8 +1,8 @@
 {
-  "name": "gost-browser",
+  "name": "ghost-browser",
   "version": "0.3.1",
   "description": "A Windows browser with capture exclusion enabled by default",
-  "author": "Gost Browser",
+  "author": "Ghost Browser",
   "private": true,
   "main": "src/main.js",
   "scripts": {
@@ -14,8 +14,8 @@
   },
   "build": {
     "compression": "store",
-    "appId": "local.gost.browser",
-    "productName": "Gost Browser",
+    "appId": "local.ghost.browser",
+    "productName": "Ghost Browser",
     "files": [
       "src/**/*",
       "package.json"
@@ -28,7 +28,7 @@
       "signAndEditExecutable": false
     },
     "portable": {
-      "artifactName": "Gost-Browser-${version}-Windows.exe"
+      "artifactName": "Ghost-Browser-${version}-Windows.exe"
     }
   },
   "devDependencies": {

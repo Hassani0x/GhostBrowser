@@ -1,6 +1,6 @@
 # Project growth playbook
 
-Gost should grow through useful software, reproducible evidence, and respectful promotion—not purchased stars, spam, or exaggerated privacy claims.
+Ghost should grow through useful software, reproducible evidence, and respectful promotion—not purchased stars, spam, or exaggerated privacy claims.
 
 ## Repository conversion
 

@@ -42,7 +42,7 @@ jobs:
       - name: Create checksums
         shell: pwsh
         run: |
-          $artifact = Get-ChildItem release -Filter 'Gost-Browser-*.exe' | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+          $artifact = Get-ChildItem release -Filter 'Ghost-Browser-*.exe' | Sort-Object LastWriteTime -Descending | Select-Object -First 1
           if (-not $artifact) { throw 'Portable executable was not produced.' }
           $hash = (Get-FileHash $artifact.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
           "$hash  $($artifact.Name)" | Set-Content release/SHA256SUMS.txt
@@ -50,9 +50,9 @@ jobs:
       - name: Publish GitHub release
         uses: softprops/action-gh-release@v2
         with:
-          name: Gost Browser ${{ inputs.tag || github.ref_name }}
+          name: Ghost Browser ${{ inputs.tag || github.ref_name }}
           generate_release_notes: true
           prerelease: true
           files: |
-            release/Gost-Browser-*.exe
+            release/Ghost-Browser-*.exe
             release/SHA256SUMS.txt

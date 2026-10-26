@@ -6,16 +6,16 @@ const pasteButton = document.createElement('button');
 pasteButton.id = 'paste'; pasteButton.textContent = 'Paste';
 pasteButton.title = 'Paste into the last focused website field (Ctrl+V)';
 $('screenshot').after(pasteButton);
-pasteButton.onclick = () => window.gost.command('paste');
+pasteButton.onclick = () => window.ghost.command('paste');
 micButton.id = 'microphone-revoke'; micButton.textContent = 'Mic allowed · Reset'; micButton.hidden = true;
 micButton.title = 'Remove microphone permission and reload this site’s tabs to stop recording';
 $('notice').after(micButton);
-micButton.onclick = () => window.gost.command('microphone-revoke');
-$('microphone-allow').onclick = () => microphonePrompt && window.gost.command('microphone-answer', { id: microphonePrompt.id, allow: true });
-$('microphone-block').onclick = () => microphonePrompt && window.gost.command('microphone-answer', { id: microphonePrompt.id, allow: false });
+micButton.onclick = () => window.ghost.command('microphone-revoke');
+$('microphone-allow').onclick = () => microphonePrompt && window.ghost.command('microphone-answer', { id: microphonePrompt.id, allow: true });
+$('microphone-block').onclick = () => microphonePrompt && window.ghost.command('microphone-answer', { id: microphonePrompt.id, allow: false });
 function update(state) {
   $('screenshot').disabled = state.screenshotBusy;
-  $('screenshot').title = state.screenshotShortcutReady ? 'Capture an area outside Gost (Ctrl+Shift+S)' : 'Capture an area outside Gost — shortcut occupied by another app';
+  $('screenshot').title = state.screenshotShortcutReady ? 'Capture an area outside Ghost (Ctrl+Shift+S)' : 'Capture an area outside Ghost — shortcut occupied by another app';
   microphonePrompt = state.microphonePrompt;
   $('microphone-prompt').hidden = !microphonePrompt;
   $('microphone-origin').textContent = microphonePrompt?.origin || '';
@@ -28,9 +28,9 @@ function update(state) {
       const group = document.createElement('div'); group.className = `tab${tab.id === state.activeId ? ' active' : ''}`; group.setAttribute('role', 'presentation');
       const select = document.createElement('button'); select.className = 'tab-select'; select.textContent = `${tab.loading ? '… ' : ''}${tab.title}`; select.title = tab.title;
       select.setAttribute('role', 'tab'); select.setAttribute('aria-selected', String(tab.id === state.activeId)); select.dataset.focus = `tab-${tab.id}`;
-      select.onclick = () => window.gost.command('select', tab.id);
+      select.onclick = () => window.ghost.command('select', tab.id);
       const close = document.createElement('button'); close.className = 'tab-close'; close.textContent = '×'; close.setAttribute('aria-label', `Close ${tab.title}`); close.dataset.focus = `close-${tab.id}`;
-      close.onclick = () => window.gost.command('close', tab.id);
+      close.onclick = () => window.ghost.command('close', tab.id);
       group.append(select, close); return group;
     }));
     if (focused) document.querySelector(`[data-focus="${focused}"]`)?.focus();
@@ -43,13 +43,13 @@ function update(state) {
   $('notice').textContent = state.notice || 'Verify with a second participant before sharing.';
   $('shortcut').textContent = state.shortcutReady ? 'Ctrl + Shift + Space to hide / show' : 'Shortcut unavailable — use the system tray';
 }
-for (const name of ['new', 'back', 'forward', 'reload', 'home', 'pin', 'hide', 'screenshot']) $(name).onclick = () => window.gost.command(name);
+for (const name of ['new', 'back', 'forward', 'reload', 'home', 'pin', 'hide', 'screenshot']) $(name).onclick = () => window.ghost.command(name);
 $('address-form').onsubmit = async event => {
   event.preventDefault();
-  await window.gost.command('navigate', $('address').value);
+  await window.ghost.command('navigate', $('address').value);
   $('address').blur();
 };
 $('address').addEventListener('focus', () => $('address').select());
-window.gost.onState(update);
-window.gost.onFocusAddress(() => { $('address').focus(); $('address').select(); });
-window.gost.command('state').then(update);
+window.ghost.onState(update);
+window.ghost.onFocusAddress(() => { $('address').focus(); $('address').select(); });
+window.ghost.command('state').then(update);

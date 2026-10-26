@@ -1,7 +1,7 @@
 // Isolated integration harness: never reads the desktop or touches the clipboard.
 const { app, BrowserWindow, nativeImage } = require('electron');
 const { createScreenshotTool, copyScreenshot } = require('../src/screenshot');
-app.setPath('userData', process.env.GOST_TEST_PROFILE);
+app.setPath('userData', process.env.GHOST_TEST_PROFILE);
 app.whenReady().then(async () => {
   const main = new BrowserWindow({ show: true, width: 800, height: 600, skipTaskbar: true });
   main.setContentProtection(true);
