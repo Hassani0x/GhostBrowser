@@ -4,11 +4,11 @@
 
 **Your workspace. Your screen. Your choice of what to share.**
 
-A privacy-focused Windows browser for keeping personal web apps out of supported screen captures while you share your screen.
+A personal web workspace for Windows, with experimental macOS and Android floating-browser previews. Capture protection and features vary by platform.
 
-![Windows 11](https://img.shields.io/badge/Windows-11-0078D4) ![Preview](https://img.shields.io/badge/version-0.3.1_preview-35b990) ![MIT license](https://img.shields.io/badge/license-MIT-blue) [![CI](https://github.com/Hassani0x/GhostBrowser/actions/workflows/ci.yml/badge.svg)](https://github.com/Hassani0x/GhostBrowser/actions/workflows/ci.yml)
+![Windows 11](https://img.shields.io/badge/Windows-11-0078D4) ![macOS preview](https://img.shields.io/badge/macOS-experimental-grey) ![Android preview](https://img.shields.io/badge/Android-experimental-3DDC84) ![Preview](https://img.shields.io/badge/version-0.3.1_preview-35b990) ![MIT license](https://img.shields.io/badge/license-MIT-blue) [![CI](https://github.com/Hassani0x/GhostBrowser/actions/workflows/ci.yml/badge.svg)](https://github.com/Hassani0x/GhostBrowser/actions/workflows/ci.yml)
 
-[Download Windows 0.3.1](https://github.com/Hassani0x/GhostBrowser/releases/download/v0.3.1/Ghost-Browser-0.3.1-Windows.exe) · [User guide](docs/USER_GUIDE.md) · [Compatibility matrix](docs/COMPATIBILITY.md) · [Report a bug](../../issues) · [Contribute](CONTRIBUTING.md)
+[Download Windows 0.3.1](https://github.com/Hassani0x/GhostBrowser/releases/download/v0.3.1/Ghost-Browser-0.3.1-Windows.exe) · [Mac & Android downloads](https://github.com/Hassani0x/GhostBrowser/actions/runs/42070903162) · [Platform guide](docs/PLATFORMS.md) · [User guide](docs/USER_GUIDE.md) · [Compatibility matrix](docs/COMPATIBILITY.md) · [Report a bug](../../issues) · [Contribute](CONTRIBUTING.md)
 
 </div>
 
@@ -37,7 +37,21 @@ If you test Ghost with a recorder or meeting app, please [submit a compatibility
 Ghost is for people who need a private web workspace during a presentation, interview, demo, lesson, or live support session. It keeps personal tabs separate from the meeting browser and exposes the Windows capture-protection status instead of making an absolute invisibility claim.
 
 
-## Features
+## Platforms and downloads
+
+| Platform | Download | Status |
+| --- | --- | --- |
+| Windows 11 x64 | [Portable EXE](https://github.com/Hassani0x/GhostBrowser/releases/tag/v0.3.1) | Existing published 0.3.1 build; it predates Glass mode. |
+| macOS Intel / Apple Silicon | [Mac preview artifact](https://github.com/Hassani0x/GhostBrowser/actions/runs/42070903162) | Compiled successfully; unsigned, not notarized, and not tested on a physical Mac. |
+| Android 8+ | [Android preview artifact](https://github.com/Hassani0x/GhostBrowser/actions/runs/42070903162) | Debug APK; floating browser requires Display over other apps permission. Device testing is pending. |
+
+For Mac and Android, open the build page and scroll to **Artifacts**. Sign in to GitHub to download, then extract the ZIP. Artifacts expire; maintainers can rerun [Platform preview builds](https://github.com/Hassani0x/GhostBrowser/actions/workflows/platform-previews.yml). These are experimental build artifacts, not additional GitHub releases.
+
+**Glass appearance:** current desktop source and Mac previews have a Glass toolbar toggle for whole-window translucency. Android has a Glass button in its floating header. The original solid dark appearance remains available. Build the current Windows source to try Glass on Windows; the existing release EXE has not been replaced.
+
+**Platform differences:** macOS ScreenCaptureKit can capture protected windows. Android requests a secure overlay, which may appear blank in recordings; it does not yet include tabs, microphone access, uploads, or desktop screenshots. See [platform setup and limitations](docs/PLATFORMS.md). The features and keyboard instructions below describe the desktop browser, primarily Windows.
+
+## Desktop features
 
 | Feature | What you get |
 | --- | --- |
@@ -48,7 +62,7 @@ Ghost is for people who need a private web workspace during a presentation, inte
 | Quick hide and recovery | Global show/hide shortcut and system-tray controls, with no taskbar entry. |
 | Sandboxed web pages | Remote pages run without Node.js or direct app-control access. |
 
-## Get started
+## Get started on Windows
 
 1. Download **Ghost-Browser-0.3.1-Windows.exe** from [Releases](../../releases/latest).
 2. Run the portable application on **Windows 11 x64**. No installer or administrator access is required. This preview is unsigned.

@@ -1,8 +1,12 @@
 # Roadmap
 
-Ghost Browser is a focused Windows preview, not a promise of universal capture invisibility. Priorities are based on reliability, compatibility evidence, and a small install footprint.
+Ghost Browser has a Windows desktop preview and experimental macOS and Android builds, not a promise of universal capture invisibility. Priorities are based on reliability, compatibility evidence, and a small install footprint.
 
 ## Next
+
+- Test Android overlays, keyboard input, navigation, and capture behavior on physical devices.
+- Test both Mac architectures, permissions, and packaging; evaluate signing and notarization.
+- Add Android tabs and origin-scoped microphone permissions.
 
 - Publish signed Windows builds and document the verification process.
 - Maintain the existing Windows CI and release workflow; expand receiver-side validation.
@@ -15,7 +19,7 @@ Ghost Browser is a focused Windows preview, not a promise of universal capture i
 - Evaluate an update mechanism with explicit user control.
 - Improve compatibility with authentication flows that require popups or opener state.
 - Add optional export/save controls for screenshots without changing the clipboard-first default.
-- Investigate macOS and Linux capture-protection equivalents only if they provide reliable, testable semantics.
+- Validate Mac and Android previews on real devices; investigate Linux only if suitable capture-protection semantics exist.
 
 ## Not planned for the preview
 

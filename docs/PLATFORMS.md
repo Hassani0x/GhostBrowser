@@ -17,3 +17,7 @@ The workflow creates a debug-signed APK for Android 8 or later. Open the app, gr
 The Android preview is a separate WebView application. It supports HTTPS browsing and native selection/copy. Microphone, file uploads, multi-tab UI, screenshots of other apps, and desktop keyboard shortcuts are not implemented. FLAG_SECURE is requested before the overlay appears; recordings may show a blank region. Device-specific validation is required. It cannot overlay secure system screens or apps that reject overlays. The debug key is for testing, not a stable production signing identity.
 
 Build locally with JDK 17, Android SDK 35, and Gradle 8.9: `gradle -p android assembleDebug`.
+
+## Download previews
+
+[Successful Mac and Android build](https://github.com/Hassani0x/GhostBrowser/actions/runs/42070903162): scroll to Artifacts and sign in to GitHub to download. Extract the downloaded archive. Artifacts have limited retention. The existing Windows release EXE predates Glass; compile current source to use the latest desktop changes.
