@@ -27,6 +27,12 @@ async function main() {
       return { protected: w.isContentProtected(), handle: w.getNativeWindowHandle().readBigUInt64LE().toString() };
     });
     assert.equal(native.protected, true);
+    await shell.evaluate(() => window.ghost.command('glass', true));
+    assert.ok(Math.abs(await application.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].getOpacity()) - 0.88) < 0.02);
+    await shell.waitForFunction(() => document.documentElement.classList.contains('glass'));
+    await shell.evaluate(() => window.ghost.command('glass', false));
+    assert.equal(await application.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].getOpacity()), 1);
+    await shell.waitForFunction(() => !document.documentElement.classList.contains('glass'));
     const script = `Add-Type -TypeDefinition 'using System; using System.Runtime.InteropServices; public class GhostAffinity { [DllImport("user32.dll", SetLastError=true)] public static extern bool GetWindowDisplayAffinity(IntPtr hWnd, out uint affinity); }'; [uint32]$affinity=0; if (-not [GhostAffinity]::GetWindowDisplayAffinity([IntPtr]::new([long]${native.handle}),[ref]$affinity)) { throw 'GetWindowDisplayAffinity failed' }; Write-Output $affinity`;
     assert.equal(execFileSync('powershell.exe', ['-NoProfile', '-Command', script], { encoding: 'utf8', windowsHide: true }).trim(), '17');
     console.log('PASS: Windows reports WDA_EXCLUDEFROMCAPTURE (0x11).');

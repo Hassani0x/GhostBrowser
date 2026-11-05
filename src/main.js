@@ -178,7 +178,7 @@ async function refreshSite() {
 function keepOnTop() {
   if (!win || win.isDestroyed()) return;
   win.setAlwaysOnTop(true, 'floating');
-  if (!win.isAlwaysOnTop()) notice = 'Windows could not enable always-on-top.';
+  if (!win.isAlwaysOnTop()) notice = 'Windows could not change pin-on-top.';
   publish();
 }
 
