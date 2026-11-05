@@ -20,4 +20,4 @@ Build locally with JDK 17, Android SDK 35, and Gradle 8.9: `gradle -p android as
 
 ## Download previews
 
-[Successful Mac and Android build](https://github.com/Hassani0x/GhostBrowser/actions/runs/42070903162): scroll to Artifacts and sign in to GitHub to download. Extract the downloaded archive. Artifacts have limited retention. The existing Windows release EXE predates Glass; compile current source to use the latest desktop changes.
+Download all platforms from [release Assets](https://github.com/Hassani0x/GhostBrowser/releases/tag/v0.3.1). Choose the Apple Silicon or Intel Mac ZIP, or the Android APK. Windows EXE includes Glass. SHA256SUMS.txt covers each download.

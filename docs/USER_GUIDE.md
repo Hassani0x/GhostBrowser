@@ -1,6 +1,6 @@
 # Ghost Browser — Windows 11 preview
 
-For macOS and Android installation, floating controls, Glass mode, and platform limitations, see [the platform guide](PLATFORMS.md). This guide describes the Windows workflow; the published EXE predates the newer Glass toggle.
+For macOS and Android installation, floating controls, Glass mode, and platform limitations, see [the platform guide](PLATFORMS.md). This guide describes the Windows workflow; the updated release EXE includes the optional Glass toggle.
 
 A separate browser for websites and web apps, with Windows capture exclusion enabled before its window appears. Keep Google Meet in Chrome and use Ghost for other websites.
 

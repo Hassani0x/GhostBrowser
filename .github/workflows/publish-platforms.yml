@@ -47,7 +47,7 @@ jobs:
           if [ '${{ matrix.platform }}' = windows ]; then cp release/*.exe downloads/; fi
           if [ '${{ matrix.platform }}' = mac ]; then
             for f in release/*arm64*.zip; do cp "$f" downloads/Ghost-Browser-0.3.1-macOS-Apple-Silicon.zip; done
-            for f in release/*x64*.zip; do cp "$f" downloads/Ghost-Browser-0.3.1-macOS-Intel.zip; done
+            cp "release/Ghost Browser-0.3.1-mac.zip" downloads/Ghost-Browser-0.3.1-macOS-Intel.zip
           fi
           if [ '${{ matrix.platform }}' = android ]; then cp android/app/build/outputs/apk/debug/app-debug.apk downloads/Ghost-Browser-0.3.1-Android-preview.apk; fi
       - uses: actions/upload-artifact@v4
