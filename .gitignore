@@ -3,3 +3,7 @@ release/
 test-results/
 *.log
 .cache/
+
+android/.gradle/
+android/**/build/
+android/local.properties

@@ -1,0 +1,6 @@
+plugins { id 'com.android.application' }
+android {
+ namespace 'dev.ghostbrowser'
+ compileSdk 35
+ defaultConfig { applicationId 'dev.ghostbrowser'; minSdk 26; targetSdk 35; versionCode 301; versionName '0.3.1' }
+}

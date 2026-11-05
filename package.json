@@ -29,6 +29,14 @@
     },
     "portable": {
       "artifactName": "Ghost-Browser-${version}-Windows.exe"
+    },
+    "mac": {
+      "target": "zip",
+      "category": "public.app-category.productivity",
+      "extendInfo": {
+        "NSMicrophoneUsageDescription": "Allow voice features on websites you approve.",
+        "NSScreenCaptureUsageDescription": "Capture an area you select for the clipboard."
+      }
     }
   },
   "devDependencies": {

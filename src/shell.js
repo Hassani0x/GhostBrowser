@@ -1,6 +1,16 @@
 const $ = id => document.getElementById(id);
 let lastTabs = '';
 let microphonePrompt = null;
+const glassButton = document.createElement('button');
+glassButton.id = 'glass'; glassButton.textContent = 'Glass';
+glassButton.title = 'Toggle translucent whole-window appearance';
+$('pin').after(glassButton);
+glassButton.onclick = async () => {
+  const enabled = glassButton.getAttribute('aria-pressed') !== 'true';
+  await window.ghost.command('glass', enabled);
+  localStorage.setItem('ghost-glass', String(enabled));
+};
+window.ghost.command('glass', localStorage.getItem('ghost-glass') === 'true');
 const micButton = document.createElement('button');
 const pasteButton = document.createElement('button');
 pasteButton.id = 'paste'; pasteButton.textContent = 'Paste';
@@ -14,6 +24,8 @@ micButton.onclick = () => window.ghost.command('microphone-revoke');
 $('microphone-allow').onclick = () => microphonePrompt && window.ghost.command('microphone-answer', { id: microphonePrompt.id, allow: true });
 $('microphone-block').onclick = () => microphonePrompt && window.ghost.command('microphone-answer', { id: microphonePrompt.id, allow: false });
 function update(state) {
+  document.documentElement.classList.toggle('glass', state.glass);
+  glassButton.setAttribute('aria-pressed', String(state.glass));
   $('screenshot').disabled = state.screenshotBusy;
   $('screenshot').title = state.screenshotShortcutReady ? 'Capture an area outside Ghost (Ctrl+Shift+S)' : 'Capture an area outside Ghost — shortcut occupied by another app';
   microphonePrompt = state.microphonePrompt;
@@ -40,6 +52,7 @@ function update(state) {
   $('back').disabled = !state.canBack; $('forward').disabled = !state.canForward;
   $('pin').setAttribute('aria-pressed', String(state.pinned));
   $('protection').textContent = state.protected ? 'Capture exclusion on' : 'Capture exclusion unavailable';
+  if (state.platform === 'darwin') $('protection').textContent = 'Mac capture protection is limited';
   $('notice').textContent = state.notice || 'Verify with a second participant before sharing.';
   $('shortcut').textContent = state.shortcutReady ? 'Ctrl + Shift + Space to hide / show' : 'Shortcut unavailable — use the system tray';
 }

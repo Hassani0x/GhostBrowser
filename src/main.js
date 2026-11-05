@@ -4,6 +4,7 @@ const { pathToFileURL } = require('node:url');
 const { isWebURL, resolveAddress } = require('./navigation');
 const { createMicrophonePermissions, originOf } = require('./microphone');
 const { createScreenshotTool } = require('./screenshot');
+const { canWriteClipboard } = require('./clipboard-permissions');
 
 const smoke = process.env.GHOST_TEST_PROFILE;
 if (smoke) app.setPath('userData', smoke);
@@ -12,6 +13,8 @@ const SHELL = pathToFileURL(path.join(__dirname, 'shell.html')).href;
 const TOP = 132;
 let win, tabs = [], activeId, nextId = 1, notice = '', shortcutReady = false;
 let browserSession, tray, screenshotTool, screenshotShortcutReady = false;
+let refreshing = false;
+let glass = false;
 const active = () => tabs.find(tab => tab.id === activeId);
 const microphone = createMicrophonePermissions({
   owns: wc => tabs.some(tab => tab.view.webContents === wc),
@@ -27,7 +30,8 @@ function state() {
     canForward: current?.view.webContents.navigationHistory.canGoForward() || false,
     protected: !!win?.isContentProtected(), pinned: !!win?.isAlwaysOnTop(), notice, shortcutReady,
     microphonePrompt: microphone.prompt(), microphoneAllowed: microphone.status(current?.view.webContents),
-    screenshotBusy: !!screenshotTool?.busy, screenshotShortcutReady
+    screenshotBusy: !!screenshotTool?.busy, screenshotShortcutReady, refreshing, glass,
+    platform: process.platform
   };
 }
 function publish() {
@@ -53,34 +57,47 @@ function keyboard(event, input) {
   if (input.type !== 'keyDown') return;
   const ctrl = input.control || input.meta;
   const key = input.key.toLowerCase();
+  if (key === 'f5' || (ctrl && key === 'r')) {
+    event.preventDefault(); void refreshSite(); return;
+  }
   if (ctrl && ['l', 't', 'w', 'r', 'tab'].includes(key)) {
     event.preventDefault();
     if (key === 'l') focusAddress();
     if (key === 't') { createTab(); focusAddress(); }
     if (key === 'w') closeTab(activeId);
-    if (key === 'r') active()?.view.webContents.reload();
     if (key === 'tab') {
       const i = tabs.findIndex(t => t.id === activeId);
       select(tabs[(i + (input.shift ? tabs.length - 1 : 1)) % tabs.length].id);
     }
   }
 }
-function createTab(url = HOME) {
-  if (tabs.length >= 24) { notice = 'Close a tab before opening another (24 tab limit).'; publish(); return; }
+function createTab(url = HOME, replacing = null) {
+  if (!replacing && tabs.length >= 24) { notice = 'Close a tab before opening another (24 tab limit).'; publish(); return; }
   const view = new WebContentsView({ webPreferences: {
     session: browserSession, nodeIntegration: false, contextIsolation: true, sandbox: true,
     webSecurity: true, allowRunningInsecureContent: false, navigateOnDragDrop: false,
     disableDialogs: true, safeDialogs: true
   }});
-  const tab = { id: nextId++, title: 'New tab', view };
-  tabs.push(tab); win.contentView.addChildView(view);
+  const tab = { id: replacing?.id || nextId++, title: 'New tab', view };
+  if (replacing) {
+    const index = tabs.indexOf(replacing);
+    microphone.cancel(replacing.view.webContents);
+    win.contentView.removeChildView(replacing.view);
+    replacing.view.webContents.close({ waitForBeforeUnload: false });
+    tabs[index] = tab;
+  } else tabs.push(tab);
+  win.contentView.addChildView(view);
   const wc = view.webContents;
   wc.on('context-menu', (_event, params) => {
-    if (!params.isEditable) return;
-    Menu.buildFromTemplate([
-      { label: 'Paste', accelerator: 'Ctrl+V', click: () => { wc.focus(); wc.paste(); } },
-      { role: 'copy' }, { role: 'cut' }, { role: 'selectAll' }
-    ]).popup({ window: win });
+    const items = [];
+    if (params.selectionText) items.push({ label: 'Copy', accelerator: 'Ctrl+C', click: () => { wc.focus(); wc.copy(); } });
+    if (params.isEditable) items.push(
+      { label: 'Cut', accelerator: 'Ctrl+X', enabled: params.editFlags.canCut, click: () => { wc.focus(); wc.cut(); } },
+      { label: 'Paste', accelerator: 'Ctrl+V', click: () => { wc.focus(); wc.paste(); } }
+    );
+    if (!items.length) return;
+    items.push({ label: 'Select all', accelerator: 'Ctrl+A', click: () => { wc.focus(); wc.selectAll(); } });
+    Menu.buildFromTemplate(items).popup({ window: win, frame: params.frame });
   });
   wc.on('did-start-navigation', (_event, _url, isInPlace, isMainFrame) => {
     if (isMainFrame && !isInPlace) microphone.cancel(wc);
@@ -131,18 +148,59 @@ function toggleVisible() {
   else { win.show(); win.restore(); win.focus(); }
 }
 
+async function refreshSite() {
+  if (refreshing || !active()) return;
+  const url = active().view.webContents.getURL();
+  if (!isWebURL(url)) { active().view.webContents.reload(); return; }
+  const origin = new URL(url).origin;
+  const selected = activeId;
+  const affected = tabs.filter(t => {
+    try { return new URL(t.view.webContents.getURL()).origin === origin; } catch { return false; }
+  }).map(t => ({ tab: t, url: t.view.webContents.getURL() }));
+  refreshing = true;
+  try {
+    // Destroy the old documents before clearing storage so unload handlers cannot
+    // write it back. Fresh WebContents also discard their sessionStorage.
+    for (const item of affected) item.replacement = createTab(HOME, item.tab);
+    select(selected);
+    notice = 'Clearing this website’s data…'; publish();
+    microphone.revoke(origin);
+    await browserSession.clearData({ origins: [origin], originMatchingMode: 'third-parties-included' });
+    for (const item of affected) {
+      if (!item.replacement.view.webContents.isDestroyed()) await item.replacement.view.webContents.loadURL(item.url);
+    }
+    notice = 'Website data cleared and page reloaded.';
+  } catch (error) {
+    notice = `Refresh could not finish: ${error.message}`;
+  } finally { refreshing = false; layout(); publish(); }
+}
+
+function keepOnTop() {
+  if (!win || win.isDestroyed()) return;
+  win.setAlwaysOnTop(true, 'floating');
+  if (!win.isAlwaysOnTop()) notice = 'Windows could not enable always-on-top.';
+  publish();
+}
+
 app.whenReady().then(async () => {
-  if (process.platform !== 'win32') throw new Error('This build requires Windows 11.');
+  if (!['win32', 'darwin'].includes(process.platform)) throw new Error('This desktop build requires Windows or macOS.');
   Menu.setApplicationMenu(null);
   browserSession = session.fromPartition('persist:ghost-web');
-  browserSession.setPermissionCheckHandler(microphone.check);
-  browserSession.setPermissionRequestHandler(microphone.request);
+  const clipboardActive = wc => wc === active()?.view.webContents && win?.isVisible() && win?.isFocused();
+  browserSession.setPermissionCheckHandler((wc, permission, origin, details = {}) =>
+    permission === 'clipboard-sanitized-write'
+      ? canWriteClipboard(wc, details.requestingUrl || origin, details, clipboardActive)
+      : microphone.check(wc, permission, origin, details));
+  browserSession.setPermissionRequestHandler((wc, permission, callback, details = {}) => {
+    if (permission === 'clipboard-sanitized-write') callback(canWriteClipboard(wc, details.requestingUrl, details, clipboardActive));
+    else microphone.request(wc, permission, callback, details);
+  });
   browserSession.on('will-download', (event) => {
     event.preventDefault(); notice = 'Downloads are disabled in this first version.'; publish();
   });
   win = new BrowserWindow({
     title: 'Ghost Browser', width: 1180, height: 800, minWidth: 760, minHeight: 520,
-    show: false, skipTaskbar: true, backgroundColor: '#101514', autoHideMenuBar: true,
+    show: false, skipTaskbar: true, alwaysOnTop: true, backgroundColor: '#101514', autoHideMenuBar: true,
     webPreferences: { preload: path.join(__dirname, 'preload.js'), nodeIntegration: false, contextIsolation: true, sandbox: true }
   });
   win.setContentProtection(true);
@@ -153,6 +211,8 @@ app.whenReady().then(async () => {
   win.webContents.on('before-input-event', keyboard);
   win.on('resize', layout);
   win.on('always-on-top-changed', publish);
+  win.on('show', keepOnTop);
+  win.on('restore', keepOnTop);
   screenshotTool = createScreenshotTool({
     getMainWindow: () => win,
     onRestoreFocus: () => active()?.view.webContents.focus(),
@@ -183,7 +243,15 @@ app.whenReady().then(async () => {
   ipcMain.handle('command', (event, name, value) => {
     if (event.sender !== win?.webContents || event.senderFrame !== win.webContents.mainFrame || event.senderFrame.url !== SHELL) throw new Error('Untrusted sender');
     const wc = active()?.view.webContents;
+    if (refreshing && !['state', 'hide'].includes(name)) return state();
     switch (name) {
+      case 'glass': {
+        glass = value === true;
+        win.setOpacity(glass ? 0.88 : 1);
+        if (process.platform === 'win32') win.setBackgroundMaterial(glass ? 'acrylic' : 'none');
+        if (process.platform === 'darwin') win.setVibrancy(glass ? 'under-window' : null);
+        break;
+      }
       case 'state': return state();
       case 'navigate': {
         try { const target = resolveAddress(value); if (target) { notice = ''; wc.loadURL(target).catch(() => {}); } }
@@ -195,12 +263,10 @@ app.whenReady().then(async () => {
       case 'close': closeTab(Number(value)); break;
       case 'back': if (wc.navigationHistory.canGoBack()) wc.navigationHistory.goBack(); break;
       case 'forward': if (wc.navigationHistory.canGoForward()) wc.navigationHistory.goForward(); break;
-      case 'reload': wc.reload(); break;
+      case 'reload': return refreshSite();
       case 'home': wc.loadURL(HOME).catch(() => {}); break;
       case 'pin': {
-        const desired = !win.isAlwaysOnTop();
-        win.setAlwaysOnTop(desired);
-        notice = win.isAlwaysOnTop() === desired ? '' : 'Windows could not change pin-on-top. The browser is still usable and capture exclusion remains on.';
+        keepOnTop();
         break;
       }
       case 'hide': toggleVisible(); break;
