@@ -1,0 +1,82 @@
+name: Publish all platforms
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            platform: windows
+          - os: macos-latest
+            platform: mac
+          - os: ubuntu-latest
+            platform: android
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - if: matrix.platform == 'windows'
+        run: npm run dist
+      - if: matrix.platform == 'mac'
+        run: npx electron-builder --mac zip --arm64 --x64 --publish never
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      - if: matrix.platform == 'android'
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - if: matrix.platform == 'android'
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+      - if: matrix.platform == 'android'
+        run: gradle -p android assembleDebug
+      - name: Stage downloads
+        shell: bash
+        run: |
+          mkdir -p downloads
+          if [ '${{ matrix.platform }}' = windows ]; then cp release/*.exe downloads/; fi
+          if [ '${{ matrix.platform }}' = mac ]; then
+            for f in release/*arm64*.zip; do cp "$f" downloads/Ghost-Browser-0.3.1-macOS-Apple-Silicon.zip; done
+            for f in release/*x64*.zip; do cp "$f" downloads/Ghost-Browser-0.3.1-macOS-Intel.zip; done
+          fi
+          if [ '${{ matrix.platform }}' = android ]; then cp android/app/build/outputs/apk/debug/app-debug.apk downloads/Ghost-Browser-0.3.1-Android-preview.apk; fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: downloads-${{ matrix.platform }}
+          path: downloads/*
+          if-no-files-found: error
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: downloads-*
+          merge-multiple: true
+          path: downloads
+      - name: Validate and publish existing release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s downloads/Ghost-Browser-0.3.1-Windows.exe
+          test -s downloads/Ghost-Browser-0.3.1-macOS-Apple-Silicon.zip
+          test -s downloads/Ghost-Browser-0.3.1-macOS-Intel.zip
+          test -s downloads/Ghost-Browser-0.3.1-Android-preview.apk
+          (cd downloads && sha256sum *.exe *.zip *.apk > SHA256SUMS.txt)
+          gh release view v0.3.1
+          gh release upload v0.3.1 downloads/* --clobber
+          gh api -X PATCH repos/${{ github.repository }}/git/refs/tags/v0.3.1 -f sha=${{ github.sha }} -F force=true
+          gh release edit v0.3.1 --title 'Ghost Browser 0.3.1 — Windows, macOS & Android' --notes-file docs/RELEASE_0.3.1.md
