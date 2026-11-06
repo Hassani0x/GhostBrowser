@@ -14,7 +14,7 @@ Download the file for your device from **Assets** below. This updates the existi
 
 ## Appearance and behavior
 
-Glass now includes adjustable background tint, surface blur, optional website styling and sharp foreground text. Native desktop blur strength is OS-controlled. Android adds background blur on supported Android 12+ devices, resize dragging and Smaller/Larger controls. Copy selected text is available through an explicit button; desktop website clipboard writes are tested with Java source. The original solid appearance remains available. Desktop source also includes website clipboard writes, copy context menus, always-on-top requests, and a refresh that clears the current site's local data (including cookies/sign-ins). Windows can still refuse pin-on-top on some systems; the app reports that failure.
+Glass toggles whole-window translucency; the original solid appearance remains available. Desktop source also includes website clipboard writes, copy context menus, always-on-top requests, and a refresh that clears the current site's local data (including cookies/sign-ins). Windows can still refuse pin-on-top on some systems; the app reports that failure.
 
 ## Platform limits
 

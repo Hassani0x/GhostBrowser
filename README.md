@@ -47,7 +47,7 @@ Ghost is for people who need a private web workspace during a presentation, inte
 
 Open the release page and expand **Assets**. Choose Windows EXE, the Mac ZIP matching your processor, or the Android APK. SHA256SUMS.txt covers all four downloads. The Source code archives are for developers.
 
-**Glass appearance:** Glass opens tint and surface-blur controls while keeping text sharp. Optional website-background styling extends the effect into pages (experimental; some sites need solid mode). Android adds resizable floating windows and device-dependent background blur on Android 12+. Desktop native blur strength is OS-controlled. The original solid dark appearance remains available. [Controls and limitations](docs/PLATFORMS.md#glass).
+**Glass appearance:** the desktop builds have a Glass toolbar toggle for whole-window translucency. Android has a Glass button in its floating header. The original solid dark appearance remains available.
 
 **Platform differences:** macOS ScreenCaptureKit can capture protected windows. Android requests a secure overlay, which may appear blank in recordings; it does not yet include tabs, microphone access, uploads, or desktop screenshots. See [platform setup and limitations](docs/PLATFORMS.md). The features and keyboard instructions below describe the desktop browser, primarily Windows.
 

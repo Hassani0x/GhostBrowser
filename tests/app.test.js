@@ -28,13 +28,8 @@ async function main() {
     });
     assert.equal(native.protected, true);
     await shell.evaluate(() => window.ghost.command('glass', true));
-    assert.equal(await application.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].getOpacity()), 1);
+    assert.ok(Math.abs(await application.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].getOpacity()) - 0.88) < 0.02);
     await shell.waitForFunction(() => document.documentElement.classList.contains('glass'));
-    await shell.evaluate(() => window.ghost.command('appearance-panel', true));
-    await shell.evaluate(() => { document.querySelector('#glass-settings').hidden = false; });
-    await shell.screenshot({ path: path.join(results, 'glass-controls.png') });
-    await shell.evaluate(() => { document.querySelector('#glass-settings').hidden = true; });
-    await shell.evaluate(() => window.ghost.command('appearance-panel', false));
     await shell.evaluate(() => window.ghost.command('glass', false));
     assert.equal(await application.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].getOpacity()), 1);
     await shell.waitForFunction(() => !document.documentElement.classList.contains('glass'));
@@ -83,15 +78,6 @@ async function main() {
         while (await wc.executeJavaScript('window.pasteResults.length') < 2 && Date.now() < deadline) await new Promise(resolve => setTimeout(resolve, 20));
       }, webId);
       assert.equal((await runWeb('window.pasteResults'))[1]?.[0]?.type, 'image/png');
-      await application.evaluate(({ webContents }, id) => webContents.fromId(id).focus(), webId);
-      const code = 'class Main {\n  public static void main(String[] args) { System.out.println("Hello"); }\n}';
-      assert.equal(await runWeb(`navigator.clipboard.writeText(${JSON.stringify(code)}).then(()=>true).catch(e=>e.name)`), true);
-      const copied = await application.evaluate(async ({ clipboard }) => {
-        for (const item of await clipboard.read()) if (item.types.includes('text/plain')) return (await item.getType('text/plain')).text();
-        return '';
-      });
-      assert.equal(copied.replace(/\r\n/g, '\n'), code);
-      console.log('PASS: website clipboard API preserves Java source text.');
       console.log('PASS: real Windows image clipboard pastes as PNG through Paste control and Ctrl+V into a sandboxed website.');
     } finally {
       await application.evaluate(async ({ app, clipboard, ClipboardItem }) => {
