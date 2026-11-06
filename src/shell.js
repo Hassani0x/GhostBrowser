@@ -5,12 +5,24 @@ const glassButton = document.createElement('button');
 glassButton.id = 'glass'; glassButton.textContent = 'Glass';
 glassButton.title = 'Toggle translucent whole-window appearance';
 $('pin').after(glassButton);
-glassButton.onclick = async () => {
-  const enabled = glassButton.getAttribute('aria-pressed') !== 'true';
-  await window.ghost.command('glass', enabled);
-  localStorage.setItem('ghost-glass', String(enabled));
+let appearance = { enabled: false, tint: 65, blur: 24, websites: true };
+try { Object.assign(appearance, JSON.parse(localStorage.getItem('ghost-appearance') || '{}')); } catch {}
+const controls = document.createElement('div'); controls.id = 'glass-settings'; controls.hidden = true;
+controls.innerHTML = '<label>Background tint <input id="glass-tint" type="range" min="15" max="95"><output id="tint-value"></output></label><label>Surface blur <input id="glass-blur" type="range" min="0" max="60"><output id="blur-value"></output></label><label><input id="glass-sites" type="checkbox"> Apply glass to website backgrounds (experimental)</label><small>Desktop background blur strength is controlled by the operating system. Surface blur affects the browser controls.</small><button id="glass-done">Done</button>';
+document.body.append(controls);
+const applyAppearance = () => {
+  localStorage.setItem('ghost-appearance', JSON.stringify(appearance));
+  window.ghost.command('glass', appearance);
 };
-window.ghost.command('glass', localStorage.getItem('ghost-glass') === 'true');
+glassButton.onclick = () => { appearance.enabled = !appearance.enabled; controls.hidden = !appearance.enabled; window.ghost.command("appearance-panel", !controls.hidden); applyAppearance(); };
+$('glass-tint').value = appearance.tint; $('glass-blur').value = appearance.blur; $('glass-sites').checked = appearance.websites;
+$('glass-tint').oninput = e => { appearance.tint = Number(e.target.value); applyAppearance(); };
+$('glass-blur').oninput = e => { appearance.blur = Number(e.target.value); applyAppearance(); };
+$('glass-sites').onchange = e => { appearance.websites = e.target.checked; applyAppearance(); };
+$('glass-done').onclick = () => controls.hidden = true;
+glassButton.oncontextmenu = e => { e.preventDefault(); controls.hidden = !controls.hidden; window.ghost.command("appearance-panel", !controls.hidden); };
+applyAppearance();
+const copyButton = document.createElement('button');copyButton.id='copy';copyButton.textContent='Copy';copyButton.title='Copy selected website text (Ctrl+C)';$('screenshot').before(copyButton);copyButton.onclick=()=>window.ghost.command('copy');
 const micButton = document.createElement('button');
 const pasteButton = document.createElement('button');
 pasteButton.id = 'paste'; pasteButton.textContent = 'Paste';
@@ -25,6 +37,10 @@ $('microphone-allow').onclick = () => microphonePrompt && window.ghost.command('
 $('microphone-block').onclick = () => microphonePrompt && window.ghost.command('microphone-answer', { id: microphonePrompt.id, allow: false });
 function update(state) {
   document.documentElement.classList.toggle('glass', state.glass);
+  const a = state.appearance || appearance;
+  document.documentElement.style.setProperty('--glass-tint', a.tint / 100);
+  document.documentElement.style.setProperty('--glass-blur', a.blur + 'px');
+  $('tint-value').textContent = a.tint + '%'; $('blur-value').textContent = a.blur + 'px';
   glassButton.setAttribute('aria-pressed', String(state.glass));
   $('screenshot').disabled = state.screenshotBusy;
   $('screenshot').title = state.screenshotShortcutReady ? 'Capture an area outside Ghost (Ctrl+Shift+S)' : 'Capture an area outside Ghost — shortcut occupied by another app';

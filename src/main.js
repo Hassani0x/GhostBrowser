@@ -5,6 +5,7 @@ const { isWebURL, resolveAddress } = require('./navigation');
 const { createMicrophonePermissions, originOf } = require('./microphone');
 const { createScreenshotTool } = require('./screenshot');
 const { canWriteClipboard } = require('./clipboard-permissions');
+const { settings: glassSettings, websiteCSS } = require('./glass');
 
 const smoke = process.env.GHOST_TEST_PROFILE;
 if (smoke) app.setPath('userData', smoke);
@@ -14,7 +15,21 @@ const TOP = 132;
 let win, tabs = [], activeId, nextId = 1, notice = '', shortcutReady = false;
 let browserSession, tray, screenshotTool, screenshotShortcutReady = false;
 let refreshing = false;
-let glass = false;
+let glass = false, appearancePanel = false;
+let appearance = glassSettings();
+function applyPageGlass(tab) {
+  tab.glassWork = (tab.glassWork || Promise.resolve()).then(() => applyPageGlassNow(tab)).catch(() => {});
+  return tab.glassWork;
+}
+async function applyPageGlassNow(tab) {
+  const wc = tab.view.webContents;
+  if (wc.isDestroyed()) return;
+  if (tab.glassKey) await wc.removeInsertedCSS(tab.glassKey).catch(() => {});
+  tab.glassKey = null;
+  tab.view.setBackgroundColor(appearance.enabled && appearance.websites ? '#00000000' : '#ffffffff');
+  const css = websiteCSS(appearance);
+  if (css) tab.glassKey = await wc.insertCSS(css).catch(() => null);
+}
 const active = () => tabs.find(tab => tab.id === activeId);
 const microphone = createMicrophonePermissions({
   owns: wc => tabs.some(tab => tab.view.webContents === wc),
@@ -31,7 +46,7 @@ function state() {
     protected: !!win?.isContentProtected(), pinned: !!win?.isAlwaysOnTop(), notice, shortcutReady,
     microphonePrompt: microphone.prompt(), microphoneAllowed: microphone.status(current?.view.webContents),
     screenshotBusy: !!screenshotTool?.busy, screenshotShortcutReady, refreshing, glass,
-    platform: process.platform
+    platform: process.platform, appearance
   };
 }
 function publish() {
@@ -40,7 +55,7 @@ function publish() {
 function layout() {
   if (!win || win.isDestroyed()) return;
   const [width, height] = win.getContentSize();
-  const top = TOP + (microphone.prompt() ? 72 : 0);
+  const top = TOP + (microphone.prompt() ? 72 : 0) + (appearancePanel ? 250 : 0);
   for (const tab of tabs) {
     tab.view.setVisible(tab.id === activeId);
     tab.view.setBounds({ x: 0, y: top, width, height: Math.max(0, height - top) });
@@ -88,6 +103,7 @@ function createTab(url = HOME, replacing = null) {
   } else tabs.push(tab);
   win.contentView.addChildView(view);
   const wc = view.webContents;
+  wc.on('did-finish-load', () => { void applyPageGlass(tab); });
   wc.on('context-menu', (_event, params) => {
     const items = [];
     if (params.selectionText) items.push({ label: 'Copy', accelerator: 'Ctrl+C', click: () => { wc.focus(); wc.copy(); } });
@@ -186,7 +202,7 @@ app.whenReady().then(async () => {
   if (!['win32', 'darwin'].includes(process.platform)) throw new Error('This desktop build requires Windows or macOS.');
   Menu.setApplicationMenu(null);
   browserSession = session.fromPartition('persist:ghost-web');
-  const clipboardActive = wc => wc === active()?.view.webContents && win?.isVisible() && win?.isFocused();
+  const clipboardActive = wc => wc === active()?.view.webContents && win?.isVisible();
   browserSession.setPermissionCheckHandler((wc, permission, origin, details = {}) =>
     permission === 'clipboard-sanitized-write'
       ? canWriteClipboard(wc, details.requestingUrl || origin, details, clipboardActive)
@@ -246,12 +262,17 @@ app.whenReady().then(async () => {
     if (refreshing && !['state', 'hide'].includes(name)) return state();
     switch (name) {
       case 'glass': {
-        glass = value === true;
-        win.setOpacity(glass ? 0.88 : 1);
+        appearance = glassSettings(typeof value === 'boolean' ? { ...appearance, enabled: value } : value);
+        glass = appearance.enabled;
+        win.setOpacity(1);
+        win.setBackgroundColor(glass ? '#00000000' : '#101514');
         if (process.platform === 'win32') win.setBackgroundMaterial(glass ? 'acrylic' : 'none');
         if (process.platform === 'darwin') win.setVibrancy(glass ? 'under-window' : null);
+        for (const tab of tabs) void applyPageGlass(tab);
         break;
       }
+      case 'appearance-panel': appearancePanel = value === true; layout(); break;
+      case 'copy': wc.focus(); wc.copy(); break;
       case 'state': return state();
       case 'navigate': {
         try { const target = resolveAddress(value); if (target) { notice = ''; wc.loadURL(target).catch(() => {}); } }
